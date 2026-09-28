@@ -59,12 +59,13 @@ Conecta tu Kiprim/OWON por USB y arranca el bridge una vez a mano para ver su n�
 .venv/bin/python -m bridge.service
 ```
 
-Copia ese número de serie a `config.yaml` (no `config.yaml.example`, ese es solo la plantilla), bajo `instrumentos:`, con el alias que quieras. Para que quede corriendo siempre de fondo, copia `systemd/kiprim-bridge.service` a `~/.config/systemd/user/`, **ajusta las rutas** (`/ruta/a/fuente-alimentacion` por dónde hayas clonado el repo) y actívalo:
+Copia ese número de serie a `config.yaml` (no `config.yaml.example`, ese es solo la plantilla), bajo `instrumentos:`, con el alias que quieras. Copia `systemd/kiprim-bridge.service` a `~/.config/systemd/user/` y **ajusta las rutas** (`/ruta/a/fuente-alimentacion` por dónde hayas clonado el repo):
 
 ```bash
 systemctl --user daemon-reload
-systemctl --user enable --now kiprim-bridge.service
 ```
+
+**Deliberadamente NO lo dejes arrancando con el sistema** (`systemctl --user enable`) — no tiene sentido tener el bridge consumiendo el puerto USB en segundo plano los días que no vayas a usarlo. Mejor que lo arranque bajo demanda quien lo necesite: la GUI. Si instalas el `.deb`, el propio lanzador ya hace `systemctl --user start kiprim-bridge.service` antes de abrir la ventana. Si lanzas la GUI desde código fuente, arráncalo tú a mano antes (`systemctl --user start kiprim-bridge.service`) o dile a tu propio launcher que lo haga.
 
 **3. GUI:**
 
