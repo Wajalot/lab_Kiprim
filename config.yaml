@@ -1,0 +1,20 @@
+mqtt:
+  host: 192.168.1.21
+  port: 1883
+  topic_prefix: lab
+
+instrumentos:
+  "24442462": kiprim_dc605s
+  # "xxxxxxxx": kiprim_dc310s   # rellenar cuando conectemos la DC310S
+
+limites:
+  kiprim_dc605s:
+    voltage_max: 15.0
+    current_max: 3.0
+  kiprim_dc310s:
+    voltage_max: 32.0
+    current_max: 10.0
+
+logging:
+  dir: sesiones
+  intervalo_s: 1.0

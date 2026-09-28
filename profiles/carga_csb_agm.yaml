@@ -1,0 +1,17 @@
+nombre: carga_csb_agm
+pasos:
+- voltage: 14.5
+  current: 0.8
+  voltage_limit: 14.9
+  current_limit: 1.2
+  output: 'ON'
+  hasta:
+    tiempo: 15.0
+- voltage: 13.9
+  current: 0.6
+  voltage_limit: 14.7
+  current_limit: 0.9
+  output: 'ON'
+  hasta:
+    tiempo: 15.0
+- output: 'OFF'

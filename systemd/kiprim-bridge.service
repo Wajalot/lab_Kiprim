@@ -1,0 +1,13 @@
+[Unit]
+Description=Bridge Kiprim/OWON - control de fuentes de laboratorio
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/joseba/Proyectos/fuente-alimentacion
+ExecStart=/home/joseba/Proyectos/fuente-alimentacion/.venv/bin/python -m bridge.service
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target
