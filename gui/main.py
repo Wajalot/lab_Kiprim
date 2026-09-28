@@ -70,16 +70,16 @@ class Insignia(QLabel):
         self.setAlignment(Qt.AlignCenter)
         self._pintar(False)
 
-    def _pintar(self, activo: bool) -> None:
-        color = "#2f6f4f" if activo else "#3a4358"
+    def _pintar(self, activo: bool, color_inactivo: str = "#3a4358") -> None:
+        color = "#2f6f4f" if activo else color_inactivo
         self.setStyleSheet(
             f"background-color: {color}; color: white; border-radius: 10px; "
             f"padding: 4px 12px; font-weight: 600;"
         )
 
-    def set_estado(self, texto: str, activo: bool) -> None:
+    def set_estado(self, texto: str, activo: bool, color_inactivo: str = "#3a4358") -> None:
         self.setText(texto)
-        self._pintar(activo)
+        self._pintar(activo, color_inactivo)
 
 
 class SpinBoxSeleccionable(QDoubleSpinBox):
@@ -324,11 +324,20 @@ class VentanaPrincipal(QMainWindow):
         self.btn_output.clicked.connect(self._toggle_output)
         fila_output.addWidget(self.btn_output)
         fila_output.addSpacing(16)
+        fila_output.addWidget(QLabel("Bridge:"))
+        self.badge_conexion = Insignia("Sin datos")
+        fila_output.addWidget(self.badge_conexion)
+        fila_output.addSpacing(16)
         fila_output.addWidget(QLabel("Perfil:"))
         self.badge_perfil = Insignia("ninguno")
         fila_output.addWidget(self.badge_perfil)
         fila_output.addStretch()
         layout.addLayout(fila_output)
+
+        self._ultimo_mensaje: float | None = None
+        self._timer_conexion = QTimer(self)
+        self._timer_conexion.timeout.connect(self._comprobar_conexion)
+        self._timer_conexion.start(1000)
 
         # Gráfica en vivo
         self.plot = pg.PlotWidget(background="#1a1f29")
@@ -373,10 +382,19 @@ class VentanaPrincipal(QMainWindow):
         self.panel_perfiles.set_alias(alias)
         self.historial = {"t": [], "v": [], "i": []}
         self.t0 = time.time()
+        self._ultimo_mensaje = None
+        self.badge_conexion.set_estado("Sin datos", False, color_inactivo="#8f3a3a")
+
+    def _comprobar_conexion(self):
+        if self._ultimo_mensaje is None or time.time() - self._ultimo_mensaje > 3.0:
+            self.badge_conexion.set_estado("Desconectado", False, color_inactivo="#8f3a3a")
+        else:
+            self.badge_conexion.set_estado("Conectado", True)
 
     def _on_estado(self, alias: str, sufijo: str, payload: str):
         if alias != self.alias_actual:
             return
+        self._ultimo_mensaje = time.time()
         if sufijo == "voltage_measured":
             self.tarjeta_v.actualizar(f"{float(payload):.2f}")
             self._acumular("v", float(payload))
