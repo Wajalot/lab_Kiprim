@@ -159,7 +159,7 @@ from bridge.config import cargar  # noqa: E402
 from panel_perfiles import PanelPerfiles  # noqa: E402
 
 VENTANA_S = 600  # muestra los últimos 10 min en la gráfica
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 
 class MqttWorker(QObject):
