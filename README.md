@@ -43,13 +43,14 @@ Tres piezas, las tres en la misma máquina si no tienes servidor propio: un brok
 sudo apt install mosquitto
 ```
 
-Con la instalación por defecto ya escucha en `localhost:1883`, que es lo que espera `config.yaml` de serie.
+Con la instalación por defecto ya escucha en `localhost:1883`, que es lo que espera la configuración de serie.
 
 **2. Bridge** (el que habla con el instrumento por USB):
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install pyserial paho-mqtt pyyaml
+cp config.yaml.example config.yaml
 ```
 
 Conecta tu Kiprim/OWON por USB y arranca el bridge una vez a mano para ver su número de serie en el log:
@@ -58,7 +59,7 @@ Conecta tu Kiprim/OWON por USB y arranca el bridge una vez a mano para ver su n�
 .venv/bin/python -m bridge.service
 ```
 
-Copia ese número de serie a `config.yaml`, bajo `instrumentos:`, con el alias que quieras. Para que quede corriendo siempre de fondo, copia `systemd/kiprim-bridge.service` a `~/.config/systemd/user/`, **ajusta las rutas** (`/ruta/a/fuente-alimentacion` por dónde hayas clonado el repo) y actívalo:
+Copia ese número de serie a `config.yaml` (no `config.yaml.example`, ese es solo la plantilla), bajo `instrumentos:`, con el alias que quieras. Para que quede corriendo siempre de fondo, copia `systemd/kiprim-bridge.service` a `~/.config/systemd/user/`, **ajusta las rutas** (`/ruta/a/fuente-alimentacion` por dónde hayas clonado el repo) y actívalo:
 
 ```bash
 systemctl --user daemon-reload

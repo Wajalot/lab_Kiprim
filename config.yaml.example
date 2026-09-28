@@ -4,8 +4,8 @@ mqtt:
   topic_prefix: lab
 
 instrumentos:
-  "24442462": kiprim_dc605s
-  # "xxxxxxxx": kiprim_dc310s   # rellenar cuando conectemos la DC310S
+  "00000000": kiprim_dc605s   # sustituye por el número de serie real (sale en el log al arrancar el bridge)
+  # "11111111": kiprim_dc310s
 
 limites:
   kiprim_dc605s:
