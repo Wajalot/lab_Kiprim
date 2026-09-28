@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/joseba/Proyectos/fuente-alimentacion
-ExecStart=/home/joseba/Proyectos/fuente-alimentacion/.venv/bin/python -m bridge.service
+WorkingDirectory=/ruta/a/fuente-alimentacion
+ExecStart=/ruta/a/fuente-alimentacion/.venv/bin/python -m bridge.service
 Restart=on-failure
 RestartSec=3
 

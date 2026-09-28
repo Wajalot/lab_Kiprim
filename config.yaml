@@ -1,5 +1,5 @@
 mqtt:
-  host: 192.168.1.21
+  host: localhost  # IP/host de tu broker Mosquitto; localhost si lo instalas en el mismo PC
   port: 1883
   topic_prefix: lab
 

@@ -33,27 +33,45 @@ Kiprim/OWON (USB) ── bridge (systemd, Python) ── MQTT ── GUI (PySide
 
 El bridge es el único proceso que toca el puerto serie. Todo lo demás —GUI, dashboards, futuros clientes web o ESP32— son clientes MQTT que se pueden conectar y desconectar sin afectar a una carga en marcha.
 
-## Instalación
+## Instalación completa
+
+Tres piezas, las tres en la misma máquina si no tienes servidor propio: un broker MQTT, el bridge, y la GUI.
+
+**1. Broker MQTT** (si no tienes uno ya):
+
+```bash
+sudo apt install mosquitto
+```
+
+Con la instalación por defecto ya escucha en `localhost:1883`, que es lo que espera `config.yaml` de serie.
+
+**2. Bridge** (el que habla con el instrumento por USB):
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install pyserial paho-mqtt pyyaml PySide6 pyqtgraph
+.venv/bin/pip install pyserial paho-mqtt pyyaml
 ```
 
-Edita `config.yaml` con la IP de tu broker MQTT y el número de serie de tu instrumento (aparece solo al arrancar el bridge la primera vez, en el log).
-
-## Uso
-
-Arrancar el bridge (recomendado como servicio, ver `systemd/kiprim-bridge.service`):
+Conecta tu Kiprim/OWON por USB y arranca el bridge una vez a mano para ver su número de serie en el log:
 
 ```bash
-python3 -m bridge.service
+.venv/bin/python -m bridge.service
 ```
 
-Lanzar la GUI:
+Copia ese número de serie a `config.yaml`, bajo `instrumentos:`, con el alias que quieras. Para que quede corriendo siempre de fondo, copia `systemd/kiprim-bridge.service` a `~/.config/systemd/user/`, **ajusta las rutas** (`/ruta/a/fuente-alimentacion` por dónde hayas clonado el repo) y actívalo:
 
 ```bash
-python3 gui/main.py
+systemctl --user daemon-reload
+systemctl --user enable --now kiprim-bridge.service
+```
+
+**3. GUI:**
+
+Instala el `.deb` de la [última Release](../../releases), o desde código fuente:
+
+```bash
+.venv/bin/pip install PySide6 pyqtgraph
+.venv/bin/python gui/main.py
 ```
 
 ## Perfiles de carga
