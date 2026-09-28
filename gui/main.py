@@ -8,7 +8,7 @@ from pathlib import Path
 import paho.mqtt.client as mqtt
 import pyqtgraph as pg
 import yaml
-from PySide6.QtCore import QLocale, QObject, Signal, Qt
+from PySide6.QtCore import QLocale, QObject, QTimer, Signal, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication, QComboBox, QDoubleSpinBox, QFrame, QGridLayout, QGroupBox, QHBoxLayout,
@@ -344,7 +344,10 @@ class VentanaPrincipal(QMainWindow):
         # dispare con el tamaño de ventana todavía sin fijar.
         self.panel_perfiles = PanelPerfiles(self.mqtt, carpeta_perfiles=str(RAIZ / "profiles"))
         self.addDockWidget(Qt.RightDockWidgetArea, self.panel_perfiles)
-        self.panel_perfiles.hide()
+        # Llamar a hide() aquí no basta: como esto corre antes de ventana.show(),
+        # el show() posterior de la ventana principal "revive" el dock igualmente.
+        # Se difiere al siguiente ciclo del bucle de eventos, después de ese show().
+        QTimer.singleShot(0, self.panel_perfiles.hide)
 
         self.resize(760, 800)
         if self.combo_instrumento.count():
