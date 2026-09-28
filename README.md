@@ -75,6 +75,16 @@ Instala el `.deb` de la [última Release](../../releases), o desde código fuent
 .venv/bin/python gui/main.py
 ```
 
+## Opcional: histórico con InfluxDB + Grafana
+
+El log local en CSV y la gráfica en vivo de la GUI (últimos 10 minutos) cubren lo básico. Si quieres histórico permanente — comparar cargas de días distintos, dashboards, alertas — el bridge ya publica toda la telemetría por MQTT en `lab/<alias>/state/#`, así que solo hace falta engancharla:
+
+1. **InfluxDB** (2.x): crea un bucket y un token de escritura.
+2. **Telegraf** como puente MQTT → InfluxDB, con su plugin de entrada `mqtt_consumer` (`data_format = "value"`, `data_type = "float"`) suscrito a `lab/+/state/+`, y de salida `outputs.influxdb_v2` apuntando a tu bucket. El `topic_parsing` de Telegraf permite sacar el alias del instrumento y el nombre de cada campo directamente de la ruta del topic, sin tocar el bridge para nada.
+3. **Grafana**: añade InfluxDB como datasource (modo Flux) y monta un dashboard con paneles filtrando por `_measurement` y el tag que hayas usado para el nombre del campo.
+
+Nada de esto toca el bridge ni la GUI — es un consumidor más de MQTT, completamente opcional y desacoplado del resto.
+
 ## Perfiles de carga
 
 Cada perfil es un YAML en `profiles/` con una lista de pasos. Cada paso puede fijar `voltage` / `current` (consigna real) y `voltage_limit` / `current_limit` (techo de protección), y termina cuando se cumple su condición `hasta`:
