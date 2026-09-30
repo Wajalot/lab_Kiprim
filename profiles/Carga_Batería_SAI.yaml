@@ -1,17 +1,17 @@
 nombre: Carga_Batería_SAI
 pasos:
 - voltage: 14.4
-  current: 1.0
+  current: 2.0
   voltage_limit: 15.0
-  current_limit: 1.5
+  current_limit: 2.5
   output: 'ON'
   hasta:
-    voltage_medido_bajo: 13.6
+    voltage_medido_bajo: 14.0
 - voltage: 13.6
   current: 1.0
   voltage_limit: 15.0
   current_limit: 1.5
   output: 'ON'
   hasta:
-    tiempo: 1000.0
+    tiempo: 1800.0
 - output: 'OFF'
