@@ -2,6 +2,11 @@
 
 Control y monitorización de fuentes de laboratorio **Kiprim/OWON** (DC605S, DC310S y compatibles) por puerto serie, con perfiles de carga programables y un bridge MQTT independiente de la interfaz gráfica.
 
+Este es el proyecto original (bridge + GUI de escritorio en Python). También hay dos piezas hermanas, intercambiables entre sí porque hablan el mismo esquema MQTT:
+
+- **[kibarra-esp32](https://github.com/Wajalot/kibarra-esp32)** — el mismo bridge corriendo directamente en un ESP32-S3, sin PC.
+- **[kibarra-android](https://github.com/Wajalot/kibarra-android)** — app nativa Android para controlarlo todo desde el móvil.
+
 ## Control manual
 
 ![KiBarra — control manual](docs/captura_principal.png)
